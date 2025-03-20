@@ -1,6 +1,7 @@
 {
   "name": "xdownloader",
   "version": "0.1.0",
+  "axios": "1.8.3"
   "private": true,
   "scripts": {
     "dev": "next dev",
