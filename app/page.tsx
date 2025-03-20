@@ -3,8 +3,8 @@ import { useState } from 'react';
 import Head from 'next/head';
 import Header from './components/header'; 
 import DownloadForm from './components/DownloadForm';
-import ResultCard from './components/ResultCard';
-import Footer from './components/Footer';
+import ResultCard from './components/resultCard';
+import Footer from './components/footer';
 
 export default function Home() {
   const [videoData, setVideoData] = useState<any>(null);
