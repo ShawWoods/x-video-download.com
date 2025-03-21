@@ -1,17 +1,25 @@
 'use client';
 import { useState } from 'react';
-import Head from 'next/head';
-import Header from './components/header'; 
+import Header from './components/header';
 import DownloadForm from './components/DownloadForm';
 import ResultCard from './components/resultCard';
 import Footer from './components/footer';
 
+// Define TypeScript interface for videoData
+interface VideoData {
+  url: string;
+  title?: string;
+  thumbnail?: string;
+  formats?: { quality: string; url: string }[]; // Adjust based on your API
+  [key: string]: any; // For flexibility if API response varies
+}
+
 export default function Home() {
-  const [videoData, setVideoData] = useState<any>(null);
+  const [videoData, setVideoData] = useState<VideoData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleDownload = async (url) => {
+  const handleDownload = async (url: string) => {
     setLoading(true);
     setError(null);
     try {
@@ -25,10 +33,10 @@ export default function Home() {
         throw new Error(`请求失败，状态码: ${response.status}${errorData ? `, 详情: ${errorData}` : ''}`);
       }
 
-      const data = await response.json();
+      const data: VideoData = await response.json();
       setVideoData(data);
     } catch (err) {
-      setError(err.message);
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -36,14 +44,14 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Metadata is ideally moved to layout.js, but keeping Head for now */}
       <Head>
-        {/* SEO 优化元标签 */}
         <title>X视频下载器 - 免费下载Twitter和X平台视频</title>
         <meta name="description" content="快速、免费下载X和Twitter视频，支持多种分辨率。只需粘贴链接，即可保存您喜爱的视频内容到本地。" />
         <meta name="keywords" content="X视频下载, Twitter视频下载, 下载X视频, 免费视频下载器, X平台视频保存" />
         <meta name="robots" content="index, follow" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta charset="UTF-8" />
+        <meta charSet="UTF-8" />
         <link rel="icon" href="/favicon.ico" />
         <meta property="og:title" content="X视频下载器 - 免费下载Twitter和X视频" />
         <meta property="og:description" content="轻松下载X和Twitter平台的视频，支持高清画质，快来试试吧！" />
@@ -54,7 +62,6 @@ export default function Home() {
       <Header />
       <main className="flex-grow container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          {/* 只保留大标题 */}
           <h1 className="text-3xl md:text-4xl font-bold text-center mb-6">
             X和Twitter视频下载器
           </h1>
@@ -65,8 +72,6 @@ export default function Home() {
             </div>
           )}
           {videoData && <ResultCard videoData={videoData} />}
-          
-          {/* 保留SEO内容，但视觉上隐藏 */}
           <section className="hidden">
             <h2>如何下载X和Twitter视频？</h2>
             <ol>
