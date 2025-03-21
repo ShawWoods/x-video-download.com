@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Head from 'next/head'; // Re-added the import
 import Header from './components/header';
 import DownloadForm from './components/DownloadForm';
 import ResultCard from './components/resultCard';
@@ -10,12 +11,12 @@ interface VideoData {
   url: string;
   title?: string;
   thumbnail?: string;
-  formats?: { quality: string; url: string }[]; // Adjust based on your API
-  [key: string]: any; // For flexibility if API response varies
+  formats?: { quality: string; url: string }[];
+  [key: string]: any; // For flexibility
 }
 
 export default function Home() {
-  const [videoData, setVideoData] = useState<VideoData | null>(null);
+  const [videoData, setVideoData] = useState<VideoData | null>(null); // Fixed: No 'any'
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,7 +45,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Metadata is ideally moved to layout.js, but keeping Head for now */}
       <Head>
         <title>X视频下载器 - 免费下载Twitter和X平台视频</title>
         <meta name="description" content="快速、免费下载X和Twitter视频，支持多种分辨率。只需粘贴链接，即可保存您喜爱的视频内容到本地。" />
