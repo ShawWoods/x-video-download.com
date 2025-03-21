@@ -1,22 +1,20 @@
 'use client';
 import { useState } from 'react';
-import Head from 'next/head'; // Re-added the import
+import Head from 'next/head';
 import Header from './components/header';
 import DownloadForm from './components/DownloadForm';
 import ResultCard from './components/resultCard';
 import Footer from './components/footer';
 
-// Define TypeScript interface for videoData
 interface VideoData {
   url: string;
   title?: string;
   thumbnail?: string;
   formats?: { quality: string; url: string }[];
-  [key: string]: any; // For flexibility
 }
 
 export default function Home() {
-  const [videoData, setVideoData] = useState<VideoData | null>(null); // Fixed: No 'any'
+  const [videoData, setVideoData] = useState<VideoData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -56,7 +54,7 @@ export default function Home() {
         <meta property="og:title" content="X视频下载器 - 免费下载Twitter和X视频" />
         <meta property="og:description" content="轻松下载X和Twitter平台的视频，支持高清画质，快来试试吧！" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://yourwebsite.com" /> {/* 替换为你的域名 */}
+        <meta property="og:url" content="https://yourwebsite.com" />
         <meta property="og:image" content="/og-image.jpg" />
       </Head>
       <Header />
