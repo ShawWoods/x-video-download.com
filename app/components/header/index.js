@@ -12,12 +12,12 @@ export default function Header() {
           <ul className="flex space-x-4">
             <li>
               <Link href="/" className="hover:underline">
-                固收
+                首页
               </Link>
             </li>
             <li>
               <Link href="/#about" className="hover:underline">
-                权益
+                关于
               </Link>
             </li>
           </ul>
