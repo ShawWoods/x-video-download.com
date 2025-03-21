@@ -1,5 +1,6 @@
 'use client';
 import { useRef, useEffect } from 'react';
+import Image from 'next/image';
 
 export default function VideoPlayer({ src, poster }) {
   const videoRef = useRef(null);
@@ -35,15 +36,17 @@ export default function VideoPlayer({ src, poster }) {
     );
   } else {
     return (
-      <div className="w-full rounded-lg overflow-hidden">
-        <img
+      <div className="w-full h-[300px] relative"> {/* Set height as needed */}
+        <Image
           src={src}
           alt="Media content"
-          className="w-full h-auto object-cover"
+          layout="fill"
+          objectFit="cover"
+          className="rounded-lg"
           onLoad={() => console.log('Image loaded:', src)}
           onError={(e) => console.error('Image load error:', src, e)}
         />
-      </div>
+</div>
     );
   }
 }
