@@ -6,7 +6,7 @@ export default function Header() {
     <header className="bg-blue-600 text-white shadow-md">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <Link href="/" className="text-l font-bold no-underline">
-          热爱生活
+          文化沟通的桥梁
         </Link>
         <nav>
           <ul className="flex space-x-4">
