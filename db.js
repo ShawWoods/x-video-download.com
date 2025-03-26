@@ -1,15 +1,24 @@
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./downloads.db');
+// db.js
+import { createClient } from '@vercel/sqlite';
 
-db.serialize(() => {
-  db.run(`
-    CREATE TABLE IF NOT EXISTS downloads (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      url TEXT UNIQUE,
-      download_count INTEGER DEFAULT 0,
-      title TEXT
-    )
-  `);
-});
+const db = createClient();
 
-module.exports = db;
+async function initializeDatabase() {
+  try {
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS downloads (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        url TEXT UNIQUE,
+        download_count INTEGER DEFAULT 0,
+        title TEXT
+      )
+    `);
+  } catch (error) {
+    console.error('Database initialization error:', error);
+  }
+}
+
+// 初始化数据库
+initializeDatabase();
+
+export default db;
