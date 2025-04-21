@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Head from 'next/head';
 import Header from './components/header';
 import DownloadForm from './components/DownloadForm';
 import ResultCard from './components/resultCard';
