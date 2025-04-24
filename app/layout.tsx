@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "'X-Video-Downloader",
+  title: "X-Video-Downloader",
   description: "X视频下载器 - 免费下载Twitter和X平台视频",
 };
 
