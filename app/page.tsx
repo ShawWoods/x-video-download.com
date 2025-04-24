@@ -50,7 +50,7 @@ export default function Home() {
         <meta name="robots" content="index, follow" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo.jpg" />
         <meta property="og:title" content="X视频下载器 - 免费下载Twitter和X视频" />
         <meta property="og:description" content="轻松下载X和Twitter平台的视频，支持高清画质，快来试试吧！" />
         <meta property="og:type" content="website" />
