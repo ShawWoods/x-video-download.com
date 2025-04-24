@@ -1,9 +1,8 @@
-// app/api/downloader/route.js
+// app/api/downloader/route.ts
 import axios from 'axios';
-import db from '../../../db'; // 引入 SQLite 数据库
 
-export async function GET(request) {
-  const url = request.nextUrl.searchParams.get('url');
+export async function GET(request: Request) {
+  const url = new URL(request.url).searchParams.get('url');
   console.log('接收到的URL:', url);
 
   if (!url || !url.startsWith('https://x.com/') || !url.includes('/status/')) {
@@ -25,28 +24,36 @@ export async function GET(request) {
     });
     console.log('RapidAPI 响应:', JSON.stringify(response.data, null, 2));
 
-    // 在成功获取视频数据后，更新下载计数
-    const videoData = response.data;
-    const title = videoData.tweet?.title || videoData.tweet?.text || 'Unknown Title'; // 根据 API 响应结构调整
+    // Assuming response.data contains formats array
+    const formats = response.data.formats || [];
+    let highestQualityUrl = '';
+    let maxQuality = 0;
 
-    db.run(
-      `INSERT INTO downloads (url, download_count, title) 
-       VALUES (?, 1, ?) 
-       ON CONFLICT(url) DO UPDATE SET download_count = download_count + 1, title = ?`,
-      [url, title, title],
-      (err) => {
-        if (err) {
-          console.error('数据库错误:', err);
-        } else {
-          console.log(`已更新下载计数: ${url}`);
-        }
+    // Find the highest quality video URL
+    for (const format of formats) {
+      const quality = parseInt(format.quality) || 0; // Assuming quality is a string like "720p"
+      if (quality > maxQuality) {
+        maxQuality = quality;
+        highestQualityUrl = format.url;
+      }
+    }
+
+    if (!highestQualityUrl) {
+      throw new Error('未找到可用的视频格式');
+    }
+
+    return new Response(
+      JSON.stringify({
+        url,
+        title: response.data.title || 'X Video',
+        thumbnail: response.data.thumbnail || '',
+        highestQualityUrl,
+      }),
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
       }
     );
-
-    return new Response(JSON.stringify(videoData), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
   } catch (error) {
     console.error('API错误:', error.message);
     return new Response(
