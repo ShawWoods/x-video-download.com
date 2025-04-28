@@ -1,8 +1,8 @@
-// app/api/downloader/route.ts
+// app/api/downloader/route.js
 import axios from 'axios';
 
-export async function GET(request: Request) {
-  const url = new URL(request.url).searchParams.get('url');
+export async function GET(request) {
+  const url = request.nextUrl.searchParams.get('url');
   console.log('接收到的URL:', url);
 
   if (!url || !url.startsWith('https://x.com/') || !url.includes('/status/')) {
@@ -22,38 +22,40 @@ export async function GET(request: Request) {
         'x-rapidapi-host': 'twitter-downloader-download-twitter-videos-gifs-and-images.p.rapidapi.com',
       },
     });
+    
     console.log('RapidAPI 响应:', JSON.stringify(response.data, null, 2));
-
-    // Assuming response.data contains formats array
-    const formats = response.data.formats || [];
-    let highestQualityUrl = '';
-    let maxQuality = 0;
-
-    // Find the highest quality video URL
-    for (const format of formats) {
-      const quality = parseInt(format.quality) || 0; // Assuming quality is a string like "720p"
-      if (quality > maxQuality) {
-        maxQuality = quality;
-        highestQualityUrl = format.url;
-      }
-    }
-
-    if (!highestQualityUrl) {
-      throw new Error('未找到可用的视频格式');
-    }
-
-    return new Response(
-      JSON.stringify({
-        url,
-        title: response.data.title || 'X Video',
-        thumbnail: response.data.thumbnail || '',
-        highestQualityUrl,
-      }),
-      {
+    
+    // 处理API返回的数据，查找最高质量的视频
+    const responseData = response.data;
+    
+    // 如果有formats数组，找出最高质量的视频
+    if (responseData.formats && responseData.formats.length > 0) {
+      // 以下是一个简化的方法来找出最高质量的视频
+      // 通常最后一个格式是最高质量的，但如果API有特定的质量标识，可以进一步完善此逻辑
+      const highestQualityVideo = responseData.formats[responseData.formats.length - 1];
+      
+      // 返回包含最高质量视频URL的响应
+      return new Response(JSON.stringify({
+        url: highestQualityVideo.url,
+        title: responseData.title || null,
+        thumbnail: responseData.thumbnail || null
+      }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
-      }
-    );
+      });
+    } else if (responseData.url) {
+      // 如果没有formats数组但有直接的url，就使用该url
+      return new Response(JSON.stringify(responseData), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    } else {
+      // 如果没有任何可用的视频URL
+      return new Response(JSON.stringify({ message: '未找到可下载的视频链接' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
   } catch (error) {
     console.error('API错误:', error.message);
     return new Response(
