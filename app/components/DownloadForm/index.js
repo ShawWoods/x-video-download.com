@@ -1,42 +1,59 @@
-// app/components/DownloadForm/index.js
+'use client';
 import { useState } from 'react';
 
-export default function DownloadForm({ onSubmit, loading }) {
+interface DownloadFormProps {
+  onSubmit: (url: string) => void;
+  loading: boolean;
+}
+
+export default function DownloadForm({ onSubmit, loading }: DownloadFormProps) {
   const [url, setUrl] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('提交的URL:', url); // 添加日志
     if (url.trim()) {
       onSubmit(url.trim());
-    } else {
-      console.error('URL 为空');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full">
-      <div className="flex flex-col md:flex-row gap-4">
+    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md mb-6">
+      <div className="mb-4">
+        <label htmlFor="url" className="block text-gray-700 font-medium mb-2">
+          输入X视频链接
+        </label>
         <input
           type="text"
-          placeholder="粘贴X平台视频链接 (https://x.com/...) 或 (https://twitter.com/...)"
+          id="url"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="https://x.com/username/status/123456789"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          className="flex-grow px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          disabled={loading}
           required
         />
-        <button
-          type="submit"
-          className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-          disabled={loading}
-        >
-          {loading ? '处理中...' : '下载'}
-        </button>
       </div>
-      <div className="mt-2 text-sm text-gray-500">
-        支持的格式: https://x.com/username/status/12345 或 https://twitter.com/username/status/12345
-      </div>
+      <button
+        type="submit"
+        disabled={loading || !url.trim()}
+        className={`w-full bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition duration-200 ${
+          loading || !url.trim() ? 'opacity-70 cursor-not-allowed' : 'hover:bg-blue-700'
+        }`}
+      >
+        {loading ? (
+          <div className="flex items-center justify-center">
+            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            处理中...
+          </div>
+        ) : (
+          '下载视频'
+        )}
+      </button>
+      <p className="text-sm text-gray-500 mt-3 text-center">
+        支持X和Twitter视频链接。将自动下载最高质量版本。
+      </p>
     </form>
   );
 }
