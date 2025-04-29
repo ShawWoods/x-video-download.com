@@ -5,7 +5,6 @@ import Header from './components/header';
 import DownloadForm from './components/DownloadForm';
 import ResultCard from './components/resultCard';
 import Footer from './components/footer';
-import AdBanner from './components/AdBanner'; // New component for ads
 
 interface VideoData {
   url: string;
@@ -59,83 +58,34 @@ export default function Home() {
         <meta property="og:image" content="/og-image.jpg" />
       </Head>
       <Header />
-      
-      {/* Top Ad Banner */}
-      <div className="w-full bg-gray-50 py-3 border-b border-gray-200">
-        <div className="container mx-auto">
-          <AdBanner id="top-ad" size="horizontal" />
-        </div>
-      </div>
-      
       <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row gap-6">
-          {/* Left Sidebar for Ads (visible on desktop) */}
-          <aside className="hidden md:block md:w-1/6">
-            <div className="sticky top-20">
-              <AdBanner id="left-sidebar-ad" size="vertical" />
+        <div className="max-w-2xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-bold text-center mb-6">
+            X和Twitter视频下载器
+          </h1>
+          <DownloadForm onSubmit={handleDownload} loading={loading} />
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-6" role="alert">
+              <p>{error}</p>
             </div>
-          </aside>
-          
-          {/* Main Content */}
-          <div className="md:w-4/6">
-            <h1 className="text-3xl md:text-4xl font-bold text-center mb-6">
-              X和Twitter视频下载器
-            </h1>
-            
-            <DownloadForm onSubmit={handleDownload} loading={loading} />
-            
-            {error && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-6" role="alert">
-                <p>{error}</p>
-              </div>
-            )}
-            
-            {/* Middle Ad (between form and results) */}
-            {!videoData && !error && !loading && (
-              <div className="my-8">
-                <AdBanner id="middle-ad" size="rectangle" />
-              </div>
-            )}
-            
-            {videoData && <ResultCard videoData={videoData} />}
-            
-            {/* Show another ad after results */}
-            {videoData && (
-              <div className="mt-8">
-                <AdBanner id="after-results-ad" size="rectangle" />
-              </div>
-            )}
-            
-            <section className="mt-8">
-              <h2 className="text-2xl font-semibold mb-4">如何下载X和Twitter视频？</h2>
-              <ol className="list-decimal pl-5 space-y-2">
-                <li>找到您想下载的X或Twitter视频。</li>
-                <li>复制视频链接（例如：https://x.com/username/status/12345）。</li>
-                <li>将链接粘贴到上面的输入框，点击"下载"按钮。</li>
-                <li>选择画质，保存视频到您的设备。</li>
-              </ol>
-              
-              <h2 className="text-2xl font-semibold mt-6 mb-4">为什么选择我们的X视频下载器？</h2>
-              <ul className="list-disc pl-5 space-y-2">
-                <li>完全免费，无隐藏费用。</li>
-                <li>支持X和Twitter视频的多种分辨率下载。</li>
-                <li>无需注册或登录，简单易用。</li>
-                <li>兼容手机和电脑，随时随地使用。</li>
-              </ul>
-            </section>
-          </div>
-          
-          {/* Right Sidebar for Ads */}
-          <aside className="hidden md:block md:w-1/6">
-            <div className="sticky top-20">
-              <AdBanner id="right-sidebar-ad" size="vertical" />
-            </div>
-          </aside>
-        </div>
-        
-        {/* Bottom Ad Before Footer */}
-        <div className="mt-12">
-          <AdBanner id="bottom-ad" size="horizontal" />
+          )}
+          {videoData && <ResultCard videoData={videoData} />}
+          <section className="hidden">
+            <h2>如何下载X和Twitter视频？</h2>
+            <ol>
+              <li>找到您想下载的X或Twitter视频。</li>
+              <li>复制视频链接（例如：https://x.com/username/status/12345）。</li>
+              <li>将链接粘贴到上面的输入框，点击“下载”按钮。</li>
+              <li>选择画质，保存视频到您的设备。</li>
+            </ol>
+            <h2>为什么选择我们的X视频下载器？</h2>
+            <ul>
+              <li>完全免费，无隐藏费用。</li>
+              <li>支持X和Twitter视频的多种分辨率下载。</li>
+              <li>无需注册或登录，简单易用。</li>
+              <li>兼容手机和电脑，随时随地使用。</li>
+            </ul>
+          </section>
         </div>
       </main>
       <Footer />
