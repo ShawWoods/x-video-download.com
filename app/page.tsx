@@ -45,8 +45,19 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       <Head>
         <meta name="google-adsense-account" content={process.env.NEXT_PUBLIC_ADSENSE_ID || 'ca-pub-9808622944599774'} />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9808622944599774"
-          crossOrigin="anonymous"></script>
+        <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_ID || 'ca-pub-9808622944599774'}`}></script>
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KMVMDTVT61"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-KMVMDTVT61');
+            `,
+          }}
+        ></script>
         <title>X视频下载器 - 免费下载Twitter和X平台视频</title>
         <meta name="description" content="快速、免费下载X和Twitter视频，支持多种分辨率。只需粘贴链接，即可保存您喜爱的视频内容到本地。" />
         <meta name="keywords" content="X视频下载, Twitter视频下载, 下载X视频, 免费视频下载器, X平台视频保存" />
