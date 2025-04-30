@@ -44,6 +44,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       <Head>
+        <meta name="google-adsense-account" content="ca-pub-9808622944599774">
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9808622944599774"
           crossOrigin="anonymous"></script>
         <title>X视频下载器 - 免费下载Twitter和X平台视频</title>
